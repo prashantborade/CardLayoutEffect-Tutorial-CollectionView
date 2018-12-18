@@ -13,6 +13,7 @@ let Apple = "An apple is a sweet, edible fruit produced by an apple tree. Apple 
 let Banana = "A banana is an edible fruit – botanically a berry – produced by several kinds of large herbaceous flowering plants in the genus Musa."
 
 let Orange = "The orange is the fruit of the citrus species Citrus × sinensis in the family Rutaceae. It is also called sweet orange, to distinguish it from the related Citrus × aurantium, referred to as bitter orange."
+let Pineapple = "The pineapple is a tropical plant with an edible multiple fruit consisting of coalesced berries, also called pineapples, and the most economically significant plant in the family Bromeliaceae."
 class ViewController: UIViewController , UICollectionViewDelegate , UICollectionViewDataSource{
    
     var fruitName:[String] = []
@@ -23,10 +24,10 @@ class ViewController: UIViewController , UICollectionViewDelegate , UICollection
         
         super.viewDidLoad()
  
-        fruitName = ["Banana","Apple","Orange","Banana","Apple","Orange"]
-        fruitDecription = [Banana,Apple,Orange,Banana,Apple,Orange]
+        fruitName = ["Banana","Apple","Orange","Banana","Apple","Orange","Pineapple"]
+        fruitDecription = [Banana,Apple,Orange,Banana,Apple,Orange,Pineapple]
         
-        fruitImage = [UIImage(named: "Banana"),UIImage(named: "Apple"),UIImage(named: "Orange"),UIImage(named: "Banana"),UIImage(named: "Apple"),UIImage(named: "Orange")] as! [UIImage]
+        fruitImage = [UIImage(named: "Banana"),UIImage(named: "Apple"),UIImage(named: "Orange"),UIImage(named: "Banana"),UIImage(named: "Apple"),UIImage(named: "Orange"),UIImage(named: "Pineapple")] as! [UIImage]
         
     }
     
@@ -55,7 +56,7 @@ class ViewController: UIViewController , UICollectionViewDelegate , UICollection
         cell.layer.shadowOpacity = 1.0
         cell.layer.masksToBounds = false
         cell.layer.shadowRadius = 4.0
-       
+        
         cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, cornerRadius: cell.contentView.layer.cornerRadius).cgPath
         
         return cell
@@ -63,4 +64,43 @@ class ViewController: UIViewController , UICollectionViewDelegate , UICollection
     }
     
     
+}
+
+extension UIView {
+    
+    @IBInspectable var shadow: Bool {
+        get {
+            return layer.shadowOpacity > 0.0
+        }
+        set {
+            if newValue == true {
+                self.addShadow()
+            }
+        }
+    }
+    
+    @IBInspectable var cornerRadius: CGFloat {
+        get {
+            return self.layer.cornerRadius
+        }
+        set {
+            self.layer.cornerRadius = newValue
+            
+            // Don't touch the masksToBound property if a shadow is needed in addition to the cornerRadius
+            if shadow == false {
+                self.layer.masksToBounds = true
+            }
+        }
+    }
+    
+    
+    func addShadow(shadowColor: CGColor = UIColor.black.cgColor,
+                   shadowOffset: CGSize = CGSize(width: 1.0, height: 2.0),
+                   shadowOpacity: Float = 0.4,
+                   shadowRadius: CGFloat = 3.0) {
+        layer.shadowColor = shadowColor
+        layer.shadowOffset = shadowOffset
+        layer.shadowOpacity = shadowOpacity
+        layer.shadowRadius = shadowRadius
+    }
 }
